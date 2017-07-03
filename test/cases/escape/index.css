@@ -1,0 +1,23 @@
+a {
+    background: \;a;
+}
+
+:not([foo=")"]) { g: 3; }
+:not(div) { g: 1; }
+:not(:nth-child(2n of [foo=")"])) { t: 1; }
+[foo=\"] { prop: 4; }
+[foo=\{] { other: true; }
+[foo=\(] { prop: "TEST"; }
+[foo=yes\:\(it\'s\ work\)] { prop: 2 }
+
+\@noat { prop: 1 }
+
+h1\\{
+    color: \\f;
+}
+
+[attr=;] { f: 1; }
+
+.prop {
+    \62 olor: red
+}

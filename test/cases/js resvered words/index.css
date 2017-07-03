@@ -1,0 +1,4 @@
+.static {
+  color: red;
+  composes: function from './my-lib.jscss';
+}

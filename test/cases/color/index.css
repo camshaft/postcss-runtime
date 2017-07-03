@@ -1,0 +1,10 @@
+a {
+  color: color(
+    color(#4C5859 shade(25%))
+    blend(color(#4C5859 shade(40%)) 20%)
+  );
+  /*background-color: color(
+    hsl(210, 10%, 85%)
+    blend(hsl(330, 50%, 70%) 50%)
+  );*/
+}

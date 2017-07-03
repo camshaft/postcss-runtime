@@ -1,0 +1,5 @@
+@import './my-lib.jscss';
+
+.foo {
+  color: var(--color);
+}

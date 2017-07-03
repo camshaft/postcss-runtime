@@ -1,0 +1,9 @@
+:root {
+  --height: 10px;
+  --width: calc(var(--height) * 2);
+}
+
+.foo {
+  height: var(--height);
+  width: var(--width);
+}

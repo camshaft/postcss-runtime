@@ -1,0 +1,4 @@
+.EXPORTED_0_foo {
+  height: 10px;
+  width: calc(10px * 2);
+}

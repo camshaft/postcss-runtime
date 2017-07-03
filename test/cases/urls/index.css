@@ -1,0 +1,8 @@
+a {
+  a: url();
+  b: url('./image');
+  c: url("image");
+  d: url(image);
+  e: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7);
+  f: url(https://google.com);
+}
