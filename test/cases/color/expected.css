@@ -1,3 +1,88 @@
 a {
-  color: rgb(55, 63, 64);
+  set-red: rgb(25, 0, 0);
+  set-red-by-percentage: rgb(26, 0, 0);
+  add-red: rgb(125, 0, 0);
+  add-red-by-percentage: rgb(55, 0, 0);
+  subtract-red: rgb(25, 0, 0);
+  subtract-red-by-percentage: rgb(45, 0, 0);
+  multiply-red: rgb(25, 0, 0);
+  multiply-red-by-percentage: rgb(25, 0, 0);
+
+  set-green: rgb(0, 25, 0);
+  set-green-by-percentage: rgb(0, 26, 0);
+  add-green: rgb(0, 125, 0);
+  add-green-by-percentage: rgb(0, 55, 0);
+  subtract-green: rgb(0, 25, 0);
+  subtract-green-by-percentage: rgb(0, 45, 0);
+  multiply-green: rgb(0, 25, 0);
+  multiply-green-by-percentage: rgb(0, 25, 0);
+
+  set-blue: rgb(0, 0, 25);
+  set-blue-by-percentage: rgb(0, 0, 26);
+  add-blue: rgb(0, 0, 125);
+  add-blue-by-percentage: rgb(0, 0, 55);
+  subtract-blue: rgb(0, 0, 25);
+  subtract-blue-by-percentage: rgb(0, 0, 45);
+  multiply-blue: rgb(0, 0, 25);
+  multiply-blue-by-percentage: rgb(0, 0, 25);
+
+  set-alpha: rgba(0, 0, 0, 0.5);
+  set-alpha-by-percentage: rgba(0, 0, 0, 0.42);
+  add-alpha: rgba(0, 0, 0, 0.1);
+  add-alpha-by-percentage: rgba(0, 0, 0, 0.55);
+  subtract-alpha: rgba(0, 0, 0, 0.9);
+  subtract-alpha-by-percentage: rgba(0, 0, 0, 0.9);
+  multiply-alpha: rgba(0, 0, 0, 0.1);
+  multiply-alpha-by-percentage: rgba(0, 0, 0, 0.1);
+
+  set-hue: hsl(25, 50%, 50%);
+  /* TODO fix postcss-values-parser */
+  /*set-hue-explicit-positive: hsl(25, 50%, 50%);*/
+  /*set-hue-explicit-negative: hsl(25, 50%, 50%);*/
+  set-hue-greater-than: hsl(25, 50%, 50%);
+  set-hue-less-than: hsl(25, 50%, 50%);
+  add-hue: hsl(25, 50%, 50%);
+  add-hue-greater-than: hsl(120, 50%, 50%);
+  subtract-hue: hsl(25, 50%, 50%);
+  subtract-hue-less-than: hsl(240, 50%, 50%);
+  multiply-hue: hsl(25, 50%, 50%);
+
+  set-saturation: hsl(25, 50%, 50%);
+  add-saturation: hsl(25, 50%, 50%);
+  subtract-saturation: hsl(25, 50%, 50%);
+  multiply-saturation: hsl(25, 50%, 50%);
+
+  set-lightness: hsl(25, 50%, 50%);
+  add-lightness: hsl(25, 50%, 50%);
+  subtract-lightness: hsl(25, 50%, 50%);
+  multiply-lightness: hsl(25, 50%, 50%);
+
+  set-whiteness: hsl(0, 100%, 60%);
+  set-whiteness-explicit-positive: hsl(0, 100%, 60%);
+  add-whiteness: hsl(0, 0%, 100%);
+  subtract-whiteness: hsl(0, 100%, 60%);
+  multiply-whiteness: hsl(0, 0%, 100%);
+
+  set-blackness: hsl(0, 100%, 40%);
+  set-blackness-explicit-positive: hsl(0, 100%, 40%);
+  add-blackness: hsl(0, 0%, 0%);
+  subtract-blackness: hsl(0, 100%, 40%);
+  multiply-blackness: hsl(0, 0%, 0%);
+
+  blend: rgb(128, 0, 0);
+
+  tint: rgb(255, 128, 128);
+  tint-alpha: rgba(255, 128, 128, 0.4);
+  tint-alpha2: rgba(255, 128, 128, 0.2);
+
+  shade: rgb(128, 0, 0);
+  shade-alpha: rgba(128, 0, 0, 0.4);
+  shade-alpha2: rgba(128, 0, 0, 0.25);
+
+  darken-light-color: hsl(180, 80%, 25%);
+  lighten-dark-color: hsl(0, 60%, 97.5%);
+  go-to-black: hsl(0, 0%, 0%);
+  go-to-white: hsl(0, 0%, 100%);
+  contrast-alpha: hsla(0, 0%, 99.5%, 0.4);
+  contrast-alpha2: hsla(180, 0%, 0.5%, 0.5);
 }

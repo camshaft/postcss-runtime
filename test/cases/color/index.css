@@ -1,10 +1,88 @@
 a {
-  color: color(
-    color(#4C5859 shade(25%))
-    blend(color(#4C5859 shade(40%)) 20%)
-  );
-  /*background-color: color(
-    hsl(210, 10%, 85%)
-    blend(hsl(330, 50%, 70%) 50%)
-  );*/
+  set-red: color(red red(25));
+  set-red-by-percentage: color(black red(10%));
+  add-red: color(rgb(100, 0, 0) red(+ 25));
+  add-red-by-percentage: color(rgb(50, 0, 0) red(+ 10%));
+  subtract-red: color(rgb(50, 0, 0) red(- 25));
+  subtract-red-by-percentage: color(rgb(50, 0, 0) red(- 10%));
+  multiply-red: color(rgb(250, 0, 0) red(* .1));
+  multiply-red-by-percentage: color(rgb(250, 0, 0) red(* 10%));
+
+  set-green: color(green green(25));
+  set-green-by-percentage: color(black green(10%));
+  add-green: color(rgb(0, 100, 0) green(+ 25));
+  add-green-by-percentage: color(rgb(0, 50, 0) green(+ 10%));
+  subtract-green: color(rgb(0, 50, 0) green(- 25));
+  subtract-green-by-percentage: color(rgb(0, 50, 0) green(- 10%));
+  multiply-green: color(rgb(0, 250, 0) green(* .1));
+  multiply-green-by-percentage: color(rgb(0, 250, 0) green(* 10%));
+
+  set-blue: color(blue blue(25));
+  set-blue-by-percentage: color(black blue(10%));
+  add-blue: color(rgb(0, 0, 100) blue(+ 25));
+  add-blue-by-percentage: color(rgb(0, 0, 50) blue(+ 10%));
+  subtract-blue: color(rgb(0, 0, 50) blue(- 25));
+  subtract-blue-by-percentage: color(rgb(0, 0, 50) blue(- 10%));
+  multiply-blue: color(rgb(0, 0, 250) blue(* .1));
+  multiply-blue-by-percentage: color(rgb(0, 0, 250) blue(* 10%));
+
+  set-alpha: color(black alpha(.5));
+  set-alpha-by-percentage: color(black alpha(42%));
+  add-alpha: color(rgba(0, 0, 0, 0) alpha(+ .1));
+  add-alpha-by-percentage: color(rgba(0, 0, 0, 0.5) alpha(+ 10%));
+  subtract-alpha: color(black alpha(- .1));
+  subtract-alpha-by-percentage: color(black alpha(- 10%));
+  multiply-alpha: color(rgba(0, 0, 0, .2) alpha(* .5));
+  multiply-alpha-by-percentage: color(rgba(0, 0, 0, .2) alpha(* 50%));
+
+  set-hue: color(hsl(34, 50%, 50%) hue(25));
+  /* TODO fix postcss-values-parser */
+  /*set-hue-explicit-positive: color(hsl(34, 50%, 50%) hue(+25));*/
+  /*set-hue-explicit-negative: color(hsl(34, 50%, 50%) hue(-335));*/
+  set-hue-greater-than: color(hsl(34, 50%, 50%) hue(385));
+  set-hue-less-than: color(hsl(34, 50%, 50%) hue(-369));
+  add-hue: color(hsl(10, 50%, 50%) hue(+ 15));
+  add-hue-greater-than: color(hsl(240, 50%, 50%) hue(+ 240));
+  subtract-hue: color(hsl(40, 50%, 50%) hue(- 15));
+  subtract-hue-less-than: color(hsl(120, 50%, 50%) hue(- 240));
+  multiply-hue: color(hsl(10, 50%, 50%) hue(* 2.5));
+
+  set-saturation: color(hsl(25, 0%, 50%) saturation(50%));
+  add-saturation: color(hsl(25, 25%, 50%) saturation(+ 25%));
+  subtract-saturation: color(hsl(25, 60%, 50%) saturation(- 10%));
+  multiply-saturation: color(hsl(25, 25%, 50%) saturation(* 2));
+
+  set-lightness: color(hsl(25, 50%, 0%) lightness(50%));
+  add-lightness: color(hsl(25, 50%, 25%) lightness(+ 25%));
+  subtract-lightness: color(hsl(25, 50%, 60%) lightness(- 10%));
+  multiply-lightness: color(hsl(25, 50%, 25%) lightness(* 2));
+
+  set-whiteness: color(hwb(0, 0%, 0%) whiteness(20%));
+  set-whiteness-explicit-positive: color(hwb(0, 0%, 0%) whiteness(+20%));
+  add-whiteness: color(hwb(0, 75%, 0%) whiteness(+ 25%));
+  subtract-whiteness: color(hwb(0, 30%, 0%) whiteness(- 10%));
+  multiply-whiteness: color(hwb(0, 50%, 0%) whiteness(* 2));
+
+  set-blackness: color(hwb(0, 0%, 0%) blackness(20%));
+  set-blackness-explicit-positive: color(hwb(0, 0%, 0%) blackness(+20%));
+  add-blackness: color(hwb(0, 0%, 75%) blackness(+ 25%));
+  subtract-blackness: color(hwb(0, 0%, 30%) blackness(- 10%));
+  multiply-blackness: color(hwb(0, 0%, 50%) blackness(* 2));
+
+  blend: color(red blend(black 50%));
+
+  tint: color(red tint(50%));
+  tint-alpha: color(red a(40%) tint(50%));
+  tint-alpha2: color(red tint(50%) a(20%));
+
+  shade: color(red shade(50%));
+  shade-alpha: color(red a(40%) shade(50%));
+  shade-alpha2: color(red shade(50%) a(25%));
+
+  darken-light-color: color(hwb(180, 10%, 0%) contrast(0%));
+  lighten-dark-color: color(hwb(0, 0%, 10%) contrast(0%));
+  go-to-black: color(hwb(180, 10%, 0%) contrast(100%));
+  go-to-white: color(hwb(0, 0%, 10%) contrast(100%));
+  contrast-alpha: color(black a(40%) contrast(99%));
+  contrast-alpha2: color(white a(50%) contrast(99%));
 }

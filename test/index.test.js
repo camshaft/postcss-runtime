@@ -114,7 +114,10 @@ function compile(css) {
 }
 
 function beautify(css) {
-  return postcss([ require('perfectionist') ])
+  return postcss([
+      require('postcss-discard-comments'),
+      require('perfectionist'),
+    ])
     .process(css)
     .then((result) => String(result.css));
 }

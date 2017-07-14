@@ -28,6 +28,7 @@
     "mocha": "^3.4.2",
     "mz": "^2.6.0",
     "perfectionist": "^2.4.0",
+    "postcss-discard-comments": "^2.0.4",
     "should": "^11.2.1"
   }
 }

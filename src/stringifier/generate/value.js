@@ -32,9 +32,12 @@ function fixUnquoteFunction(node) {
     if (c.type === 'comma' || c.type == 'paren') c.remove();
   });
 
-  node.each((c, i) => {
-    if (i) node.insertBefore(c, parser.comma({ value: ', ', unquote: true }));
-  });
+  for (let i = nodes.length - 1; i >= 1; i--) {
+    node.insertBefore(
+      nodes[i],
+      parser.comma({ value: ', ', unquote: true })
+    );
+  }
 
   if (!isParen(node.first, '(')) {
     node.prepend(parser.paren({ value: '(', unquote: true }));
@@ -85,8 +88,10 @@ const generators = {
       });
       if (!parent.unquote) builder(' }');
     } else {
+      if (parent.unquote) builder('`');
       builder(String(node.value));
       container(node, builder);
+      if (parent.unquote) builder('`');
     }
 
     if (!parent.unquote && raws.after) {
