@@ -1,4 +1,4 @@
-const color = require.resolve('../src/color');
+const runtimeDir = require('path').dirname(require.resolve('../src/runtime'));
 
 require("babel-register")({
   extensions: [".js", ".jscss"],
@@ -12,7 +12,8 @@ require("babel-register")({
     'transform-es2015-modules-commonjs',
   ],
   ignore: (filename) => {
-    return filename !== color && !/\.jscss$/.test(filename);
+    if (filename.indexOf(runtimeDir) === 0) return false;
+    return !/\.jscss$/.test(filename);
   }
 });
 
@@ -21,8 +22,10 @@ const Path = require('path');
 const fs = require('mz/fs');
 const glob = require('glob-promise');
 
+const createSheet = require('../src/runtime').default;
+const createBackend = require('../src/runtime/backend/text').default;
+
 const postcss = require('postcss');
-const runtime = require('./runtime');
 
 const root = __dirname + '/cases';
 
@@ -72,39 +75,54 @@ function loadCase(dir) {
 
 function verify(expected, actual) {
   should(actual.css).eql(expected.css);
-  if (expected.locals) should(actual.locals).eql(expected.locals);
+  if (expected.exports) should(actual.exports).eql(expected.exports);
 }
 
-function loadExpected(dir, locals) {
+function loadExpected(dir, exports) {
   const path = Path.join(dir, 'expected.css');
   return fs.readFile(path, 'utf8')
     .then(beautify)
-    .then(css => ({css: css, locals: locals}));
+    .then(css => ({css: css, exports: exports}));
 }
 
 function loadActual(dir, vars) {
   const path = Path.join(dir, 'index.jscss');
-  delete require.cache[path];
-  const index = require(path);
 
-  const baseVars = {}
-  const result = runtime(index.$, baseVars, new Map());
+  const locals = new Map();
   Object.keys(vars).forEach((k) => {
     const value = vars[k];
-    baseVars[k] = () => value;
+    locals.set(k, () => value);
   });
 
-  return beautify(toString(result, new Set()))
-    .then(css => ({css: css, locals: result.locals}));
+  return renderModule(path, locals)
+    .then(({ css, exports }) => {
+      return beautify(css)
+        .then(css => ({ css, exports }))
+    });
 }
 
-function toString(mod, used) {
-  if (used.has(mod)) return '';
-  used.add(mod);
-  return mod.imports
-    .map(i => toString(i, used))
-    .concat([String(mod)])
-    .join('\n');
+function renderModule(path, locals) {
+  delete require.cache[path];
+
+  return new Promise((resolve) => {
+    const theme = {};
+    theme[path] = require(path);
+
+    const backend = createBackend((css) => {
+      resolve({
+        css,
+        exports: exports[path],
+      })
+    });
+
+    let i = 0;
+    function generateName() {
+      const mod = i++;
+      return (name) => `EXPORTED_${mod}_${name}`;
+    }
+
+    const { exports } = createSheet(theme, backend, generateName)(locals);
+  });
 }
 
 function compile(css) {

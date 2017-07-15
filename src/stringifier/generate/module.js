@@ -7,7 +7,7 @@ const sheetName = require('../utils').sheetName;
 
 module.exports = function(compilation, builder, root) {
   const prefix = compilation.opts.prefix || 'export';
-  builder(`${prefix} function ${sheetName}($createStatic, $generateName, $factory, $define, $alias) {\n`, root);
+  builder(`${prefix} function ${sheetName}($createStatic, $generateName, $instance, $define, $alias) {\n`, root);
   [
     generateStaticNames,
     generateStaticRules,

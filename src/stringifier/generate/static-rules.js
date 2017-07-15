@@ -10,14 +10,17 @@ module.exports = (compilation, builder, root) => {
     const name = `$staticChunk${count++}`;
     if (node) {
       node.staticChunk = name;
-      builder(`${indent}const ${name} = $createStatic(\``, node, 'start');
+      builder(`${indent}const ${name} = $createStatic(`, node, 'start');
     } else {
-      builder(`${indent}$createStatic(\``, node, 'start');
+      builder(`${indent}$createStatic(`, node, 'start');
     }
-    buffer.forEach((node) => {
+    buffer.forEach((node, i) => {
+      if (i) builder(', `');
+      else builder('`');
       stringify(node, builder);
+      builder('`');
     });
-    builder('`);\n', node, 'end');
+    builder(');\n', node, 'end');
     buffer = [];
   }
 

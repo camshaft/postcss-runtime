@@ -3,14 +3,17 @@
   "version": "0.1.0",
   "description": "execute css at runtime",
   "main": "src/index.js",
+  "browser": "src/runtime/index.js",
   "license": "MIT",
   "scripts": {
     "test": "mocha",
     "test:watch": "mocha --watch-extensions css -w"
   },
   "dependencies": {
+    "@statechart/util-set": "^0.1.13",
     "camelcase": "^4.1.0",
     "color": "^2",
+    "generic-diff": "^1.0.1",
     "loader-utils": "^1.1.0",
     "postcss": "^6.0.3",
     "postcss-nested": "^2.0.2",

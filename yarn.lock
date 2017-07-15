@@ -2,6 +2,12 @@
 # yarn lockfile v1
 
 
+"@statechart/util-set@^0.1.13":
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/@statechart/util-set/-/util-set-0.1.13.tgz#2623b05e77359da9ca710733f5f96a21bedd95fe"
+  dependencies:
+    babel-runtime "^6.23.0"
+
 ansi-regex@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-2.1.1.tgz#c3b33ab5ee360d86e0e628f0468ae7ef27d654df"
@@ -435,7 +441,7 @@ babel-register@^6.24.1:
     mkdirp "^0.5.1"
     source-map-support "^0.4.2"
 
-babel-runtime@^6.18.0, babel-runtime@^6.22.0:
+babel-runtime@^6.18.0, babel-runtime@^6.22.0, babel-runtime@^6.23.0:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.23.0.tgz#0a9489f144de70efb3ce4300accdb329e2fc543b"
   dependencies:
@@ -601,6 +607,12 @@ fs.realpath@^1.0.0:
 gather-stream@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/gather-stream/-/gather-stream-1.0.0.tgz#b33994af457a8115700d410f317733cbe7a0904b"
+
+generic-diff@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/generic-diff/-/generic-diff-1.0.1.tgz#21d40763a18fc5acd52065c11a8d9b2f95572259"
+  dependencies:
+    object-assign "^2.0.0"
 
 glob-promise@^3.1.0:
   version "3.1.0"
@@ -821,6 +833,10 @@ mz@^2.6.0:
 number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
+
+object-assign@^2.0.0:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-2.1.1.tgz#43c36e5d569ff8e4816c4efa8be02d26967c18aa"
 
 object-assign@^4.0.1:
   version "4.1.1"

@@ -125,6 +125,14 @@ module.exports = class Stringifier {
       root = fun(root, this) || root;
     });
 
+    root.walkRules((rule) => {
+      if (!rule.nodes.length) rule.remove();
+    });
+
+    root.walkAtRules((atrule) => {
+      if (!atrule.nodes.length) atrule.remove();
+    });
+
     [
       generateImports,
       generateConstants,

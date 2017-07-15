@@ -35,8 +35,8 @@ exports.mergeRaws = (...nodes) => {
   nodes.forEach((node) => {
     const r = node.raws || node.spaces;
 
-    raw.before = raw.before + r.before;
-    raw.after = r.after + raw.after;
+    raw.before = raw.before + (r.before || '');
+    raw.after = (r.after || '') + raw.after;
   });
   return raw;
 }

@@ -56,5 +56,5 @@ function stringify(node, builder) {
 };
 
 module.exports = (node, builder) => {
-  stringify(node, builder);
+  return stringify(node, builder);
 };

@@ -21,11 +21,14 @@ module.exports = (compilation, builder, root) => {
       builder(`${indent}$inject(${staticChunk});\n`, node);
     }
 
-    builder(`${indent}$inject(\``, node, 'start');
-    buffer.forEach((node) => {
+    builder(`${indent}$inject(`, node, 'start');
+    buffer.forEach((node, i) => {
+      if (i) builder(', `');
+      else builder('`');
       stringify(node, builder);
+      builder('`');
     });
-    builder('`);\n', node, 'end');
+    builder(');\n', node, 'end');
 
     buffer = [];
   }

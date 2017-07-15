@@ -17,7 +17,7 @@ module.exports = function(compilation, builder, root) {
             generateDependencies(String(node.value));
             break;
           case 'external':
-            builder(`, ${String(node.module)}[${node.value}]`);
+            builder(`, ${String(node.module)}.get(${node.value})`);
             break;
         }
       });

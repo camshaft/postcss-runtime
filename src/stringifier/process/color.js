@@ -1,6 +1,6 @@
 const parser = require('postcss-values-parser');
 const Color = require('color');
-const colorMod = require.resolve('../../color');
+const colorMod = require.resolve('../../runtime/color');
 
 /**
  * color: color(red darken(0.2));

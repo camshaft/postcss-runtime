@@ -26,12 +26,12 @@ module.exports = function(compilation, builder, root) {
     .join('')
 
   if (!imports && !dependencies && !compilation.exports.size) {
-    builder(`  // no factory\n`);
+    builder(`  // no instance\n`);
     return;
   }
 
   // TODO
-  builder(`  $factory(($render, $expose${imports}) => {\n`);
+  builder(`  $instance(($render, $expose${imports}) => {\n`);
 
   [
     generateDynamicNames,
