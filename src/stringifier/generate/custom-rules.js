@@ -21,7 +21,6 @@ module.exports = function(compilation, builder, root) {
       stringify(node, builder);
       builder('`');
     });
-    // stringify(reason.value || reason.params, builder);
     builder('\n  )}');
 
     if (dependencies.size) {
