@@ -1,0 +1,23 @@
+.EXPORTED_0_link {
+  color: red;
+}
+
+.EXPORTED_0_link {
+  box-sizing: border-box;
+  font-smoothing: antialiased;
+  text-size-adjust: 100%;
+  font-family: "Comic Sans";
+}
+
+.EXPORTED_0_link *,
+.EXPORTED_0_link *::after,
+.EXPORTED_0_link *::before {
+  box-sizing: border-box;
+  font-smoothing: antialiased;
+  text-size-adjust: 100%;
+  font-family: "Comic Sans";
+}
+
+.EXPORTED_0_link {
+  margin: 0;
+}

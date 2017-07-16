@@ -1,0 +1,27 @@
+:root {
+  --font: "Comic Sans";
+
+  --reset: {
+    box-sizing: border-box;
+    font-smoothing: antialiased;
+    text-size-adjust: 100%;
+    font-family: var(--font);
+
+    & *,
+    & *::after,
+    & *::before {
+      box-sizing: border-box;
+      font-smoothing: antialiased;
+      text-size-adjust: 100%;
+      font-family: var(--font);
+    }
+  }
+}
+
+.link {
+  color: red;
+
+  @apply --reset;
+
+  margin: 0;
+}

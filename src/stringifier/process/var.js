@@ -1,4 +1,4 @@
-const camelcase = require('camelcase');
+const formatVar = require('../utils').formatVar;
 const mergeRaws = require('../utils').mergeRaws;
 
 exports = module.exports = (node, compilation) => {
@@ -30,7 +30,7 @@ exports.parse = (decl, constants, dependencies) => {
     const name = args[0];
     if (!name && name.type !== 'word') return;
     const formattedName = name.value.replace(/^--/, '');
-    const ccName = '$' + camelcase(`var${name.value}`) + '';
+    const ccName = formatVar(name.value);
     dependencies.set(formattedName, ccName);
     constants.set(formattedName);
 

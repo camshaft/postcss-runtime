@@ -45,3 +45,5 @@ exports.escapeCSS = css =>
   String(css)
     .replace(/\\/g, '\\\\')
     .replace(/\$\{/g, '\\${');
+
+exports.formatVar = (name) => `$${camelcase(`var_${name}`)}`

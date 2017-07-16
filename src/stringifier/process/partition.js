@@ -5,8 +5,12 @@ function nested(node) {
   let current;
   node.each((child) => {
     select(child).forEach((result) => {
-      if (!current || current.hasVar !== result.hasVar) {
-        current = node.clone({ nodes: [], hasVar: result.hasVar });
+      if (!current || current.hasVar !== result.hasVar || result.apply) {
+        current = node.clone({
+          nodes: [],
+          hasVar: result.hasVar,
+          apply: result.apply
+        });
         nodes.push(current);
       }
       current.append(result);
@@ -22,6 +26,7 @@ const selectors = {
     return [node];
   },
   root(node) {
+    if (node.hasVar) return node;
     const clone = node.clone({ nodes: [] });
     node.each((child) => {
       select(child).forEach(n => clone.append(n));

@@ -1,18 +1,6 @@
 const postcss = require('postcss');
-const nested = require('postcss-nested');
-const values = require('postcss-values-parser');
-const selectors = require('postcss-selector-parser');
-const processImport = require('./process/import');
+const processRoot = require('./process');
 const processCustomRules = require('./process/custom-rules');
-const processCustomProperties = require('./process/custom-properties');
-const processCustomMedia = require('./process/custom-media');
-const processExtends = require('./process/extends');
-const processVar = require('./process/var');
-const processColor = require('./process/color');
-const processPartition = require('./process/partition');
-const processExports = require('./process/exports');
-const processUrl = require('./process/url');
-const processComposes = require('./process/composes');
 const generateImports = require('./generate/imports');
 const generateConstants = require('./generate/constants');
 const generateExports = require('./generate/exports');
@@ -58,6 +46,22 @@ module.exports = class Stringifier {
     nodes.add(node);
   }
 
+  child() {
+    const child = new Stringifier(this.builder, this.opts);
+    Object.assign(child, this, {
+      dependencies: new Map(),
+      extends: new Map(),
+      exports: new Map(),
+      composes: new Map(),
+      defines: new Map(),
+      aliases: new Map(),
+      staticNames: new Map(),
+      dynamicNames: new Map(),
+      customRules: new Map(),
+    });
+    return child;
+  }
+
   stringify(root) {
     this.imports = [];
     this.exports = new Map();
@@ -70,6 +74,7 @@ module.exports = class Stringifier {
     this.composes = new Map();
     this.defines = new Map();
     this.aliases = new Map();
+    this.customRules = new Map();
 
     [
       processCustomRules,
@@ -77,55 +82,7 @@ module.exports = class Stringifier {
       root = fun(root, this) || root;
     });
 
-    // un-nest selectors
-    nested()(root),
-
-    root.walk((node) => {
-      switch (node.type) {
-        case 'atrule':
-          if (node.params) {
-            node.params = values(node.params, { loose: true })
-              .parse();
-          }
-          break;
-        case 'rule':
-          if (node.selector) {
-            node.selector = selectors()
-              .process(node.selector, { lossless: true })
-              .res;
-          }
-          break;
-        case 'decl':
-          if (node.value) {
-            node.value = values(node.value, { loose: true })
-              .parse();
-          }
-          break;
-        case 'comment':
-          node.remove();
-          break;
-      }
-    });
-
-    [
-      processColor,
-      processUrl,
-      processCustomProperties,
-      processCustomMedia,
-      processExtends,
-      processImport,
-      processVar,
-      processPartition,
-      processExports,
-      processComposes,
-    ].forEach((fun) => {
-      root = fun(root, this) || root;
-    });
-
-    root.walk((node) => {
-      const { nodes } = node;
-      if (nodes && nodes.length === 0) node.remove();
-    });
+    root = processRoot(root, this);
 
     [
       generateImports,
