@@ -9,7 +9,7 @@ module.exports = (node, compilation) => {
     if (!RE.test(String(rule.selector))) return;
     const name = selector.replace(RE, '');
     constants.set(name);
-    console.log(name);
+    console.log('UNHANDLED CUSTOM RULE', name);
 
     // const dependencies = new Map();
     // parseVar(decl, constants, dependencies);

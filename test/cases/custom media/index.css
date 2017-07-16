@@ -1,0 +1,15 @@
+@custom-media --portrait (orientation: portrait);
+@custom-media --xxs-viewport (max-width: 480px);
+
+@custom-media --aliased (--portrait);
+
+:root {
+  --color: red;
+}
+
+@media screen and (--xxs-viewport) and (--aliased) {
+  body {
+    font-size: 1rem;
+    color: var(--color);
+  }
+}

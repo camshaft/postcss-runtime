@@ -25,7 +25,7 @@ module.exports = (node, compilation) => {
       aliases.set(name, alias);
     } else {
       defines.set(name, {
-        decl: decl,
+        reason: decl,
         dependencies: dependencies,
       });
     }

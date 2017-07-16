@@ -12,12 +12,11 @@ exports = module.exports = (node, compilation) => {
 exports.parse = (decl, constants, dependencies) => {
   const vars = [];
 
-  const value = decl.value;
+  const value = decl.value || decl.params;
   if (!value) return;
 
   value.walk((fun) => {
     if (fun.type === 'func' && fun.value === 'var') {
-      fun.decl = decl;
       vars.push(fun);
       decl.hasVar = true;
     }

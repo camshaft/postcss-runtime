@@ -1,4 +1,6 @@
 function nested(node) {
+  if (node.hasVar) return [node];
+
   const nodes = [];
   let current;
   node.each((child) => {

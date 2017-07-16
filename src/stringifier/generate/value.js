@@ -123,7 +123,7 @@ const generators = {
 };
 
 function stringify(node, builder, parent) {
-  // if (!generators[node.type]) console.error(node);
+  if (!generators[node.type]) console.error(node);
   return generators[node.type](node, builder, parent);
 }
 

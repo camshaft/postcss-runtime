@@ -4,11 +4,15 @@ const escape = require('../utils').escapeCSS;
 
 const generators = {
   atrule(node, builder) {
-    // builder('${/* TODO atrule */}');
-  },
+    const after = node.params ? ' ' : '';
+    builder(`@${node.name}${after}`, node);
+    if (node.params) stringifyValue(node.params, builder);
 
-  comment(node, builder) {
-    // builder(`\${/* ${node.text} */}`, node);
+    if (node.nodes) {
+      this.block(node, builder);
+    } else {
+      builder(';');
+    }
   },
 
   decl(node, builder) {
@@ -28,7 +32,6 @@ const generators = {
   },
 
   rule(node, builder) {
-    if (!node.nodes.length) return;
     stringifySelector(node.selector, builder);
     this.block(node, builder);
   },

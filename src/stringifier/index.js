@@ -5,6 +5,7 @@ const selectors = require('postcss-selector-parser');
 const processImport = require('./process/import');
 const processCustomRules = require('./process/custom-rules');
 const processCustomProperties = require('./process/custom-properties');
+const processCustomMedia = require('./process/custom-media');
 const processExtends = require('./process/extends');
 const processVar = require('./process/var');
 const processColor = require('./process/color');
@@ -79,42 +80,38 @@ module.exports = class Stringifier {
     // un-nest selectors
     nested()(root),
 
-    root.walkAtRules((atrule) => {
-      if (atrule.params) {
-        // try {
-          atrule.params = values(atrule.params, { loose: true })
-            .parse();
-        // } catch (err) {}
+    root.walk((node) => {
+      switch (node.type) {
+        case 'atrule':
+          if (node.params) {
+            node.params = values(node.params, { loose: true })
+              .parse();
+          }
+          break;
+        case 'rule':
+          if (node.selector) {
+            node.selector = selectors()
+              .process(node.selector, { lossless: true })
+              .res;
+          }
+          break;
+        case 'decl':
+          if (node.value) {
+            node.value = values(node.value, { loose: true })
+              .parse();
+          }
+          break;
+        case 'comment':
+          node.remove();
+          break;
       }
     });
-
-    root.walkRules((rule) => {
-      if (rule.selector) {
-        // try {
-          rule.selector = selectors()
-            .process(rule.selector, { lossless: true })
-            .res;
-        // } catch (err) {}
-      }
-    });
-
-    root.walkDecls((decl) => {
-      if (decl.value) {
-        // try {
-          decl.value = values(decl.value, { loose: true })
-            .parse();
-        // } catch (err) {}
-      }
-    });
-
-    // root.walkRules((rule) => {
-    //   if (String(rule.selector) === ':root') rule.remove();
-    // });
 
     [
       processColor,
       processUrl,
       processCustomProperties,
+      processCustomMedia,
       processExtends,
       processImport,
       processVar,
@@ -125,12 +122,9 @@ module.exports = class Stringifier {
       root = fun(root, this) || root;
     });
 
-    root.walkRules((rule) => {
-      if (!rule.nodes.length) rule.remove();
-    });
-
-    root.walkAtRules((atrule) => {
-      if (!atrule.nodes.length) atrule.remove();
+    root.walk((node) => {
+      const { nodes } = node;
+      if (nodes && nodes.length === 0) node.remove();
     });
 
     [
