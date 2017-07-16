@@ -1,6 +1,6 @@
 import Color from 'color';
 
-export default function(color, ...mods) {
+export function applyColorMods(color, ...mods) {
   if (!color) return color;
   return mods.reduce((acc, mod) =>
     mod(acc)

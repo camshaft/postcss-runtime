@@ -1,5 +1,3 @@
-const runtimeDir = require('path').dirname(require.resolve('../src/runtime'));
-
 require("babel-register")({
   extensions: [".js", ".jscss"],
   cache: true,
@@ -12,7 +10,6 @@ require("babel-register")({
     'transform-es2015-modules-commonjs',
   ],
   ignore: (filename) => {
-    if (filename.indexOf(runtimeDir) === 0) return false;
     return !/\.jscss$/.test(filename);
   }
 });
@@ -22,8 +19,12 @@ const Path = require('path');
 const fs = require('mz/fs');
 const glob = require('glob-promise');
 
-const createSheet = require('../src/runtime').default;
-const createBackend = require('../src/runtime/backend/text').default;
+process.env.POSTCSS_RUNTIME_PATH = Path.dirname(__dirname);
+
+const {
+  createSheet,
+  createTextBackend: createBackend,
+} = compiler = require('..');
 
 const postcss = require('postcss');
 
@@ -127,7 +128,7 @@ function renderModule(path, locals) {
 
 function compile(css) {
   return postcss()
-    .process(css, { stringifier: require('../') })
+    .process(css, { stringifier: compiler })
     .then((result) => String(result.css));
 }
 
