@@ -6,5 +6,3 @@ export function stringify(node, builder) {
 }
 
 export { Stringifier };
-
-export * from '../runtime/index';

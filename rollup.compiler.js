@@ -3,10 +3,10 @@ import babel from 'rollup-plugin-babel';
 const external = Object.keys(require('./package.json').dependencies || {});
 
 export default {
-  entry: 'src/compiler/index.js',
+  entry: 'src/index.js',
   targets: [
-    { dest: 'dist/compiler.js', format: 'cjs' },
-    { dest: 'dist/compiler.es.js', format: 'es' },
+    { dest: 'dist/index.js', format: 'cjs' },
+    { dest: 'dist/index.es.js', format: 'es' },
   ],
   external: external.concat([/^babel-runtime/]),
   plugins: [

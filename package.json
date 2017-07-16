@@ -2,8 +2,9 @@
   "name": "postcss-runtime",
   "version": "0.1.0",
   "description": "compile PostCSS to JS",
-  "main": "dist/compiler",
-  "browser": "dist/runtime",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "browser": "dist/runtime.es.js",
   "license": "MIT",
   "scripts": {
     "build": "rollup -c rollup.runtime.js && rollup -c rollup.compiler.js",
