@@ -4,5 +4,10 @@ a {
   c: url(__IMAGE__);
   d: url(__IMAGE__);
   e: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7);
-  f: url(https://google.com);
+  f: url(http://example.com/image.gif);
+}
+
+a {
+  g: url('http://example.com/image.png');
+  h: url('http://example.com/image.png');
 }

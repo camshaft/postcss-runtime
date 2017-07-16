@@ -18,7 +18,7 @@
     "postcss": "^6.0.3",
     "postcss-nested": "^2.0.2",
     "postcss-selector-parser": "^2.2.3",
-    "postcss-values-parser": "^1.2.2",
+    "postcss-values-parser": "camshaft/postcss-values-parser",
     "reserved-words": "^0.1.1"
   },
   "devDependencies": {

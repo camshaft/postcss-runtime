@@ -905,9 +905,9 @@ postcss-value-parser@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-3.3.0.tgz#87f38f9f18f774a4ab4c8a232f5c5ce8872a9d15"
 
-postcss-values-parser@^1.2.2:
+postcss-values-parser@camshaft/postcss-values-parser:
   version "1.2.2"
-  resolved "https://registry.yarnpkg.com/postcss-values-parser/-/postcss-values-parser-1.2.2.tgz#f5eebdd7f6fe310e2e448b9cc03bfed8726ca271"
+  resolved "https://codeload.github.com/camshaft/postcss-values-parser/tar.gz/2f25397482de8b06a1ed73a79ad03d0681e75419"
   dependencies:
     flatten "^1.0.2"
     indexes-of "^1.0.1"

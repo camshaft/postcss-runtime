@@ -17,16 +17,29 @@ module.exports = function(root, compilation) {
         return;
       }
 
-      if (arg.type === 'word' || arg.type === 'string') {
-        const url = formatPath(arg.value, compilation.opts.root);
-        if (!url) return;
-        arg.replaceWith(parser.word({
-          unquote: true,
-          value: compilation.import(url, 'default', decl),
-          source: arg.source,
-          sourceIndex: arg.sourceIndex,
-        }))
+      if (arg.type === 'func' && arg.value === 'var') {
+        return;
       }
+
+      const path = node.nodes.slice(1, -1).map(n => (
+        n.type === 'string' ?
+          n.value :
+          String(n)
+      )).join('');
+
+      const url = formatPath(path, compilation.opts.root);
+      if (!url) return;
+
+      node.removeAll();
+
+      node.append(parser.paren({ value: '(' }));
+      node.append(parser.word({
+        unquote: true,
+        value: compilation.import(url, 'default', decl),
+        source: arg.source,
+        sourceIndex: arg.sourceIndex,
+      }));
+      node.append(parser.paren({ value: ')' }));
     });
   });
 }
