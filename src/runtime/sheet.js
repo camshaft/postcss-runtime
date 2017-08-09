@@ -19,8 +19,8 @@ export default function createSheet(theme, backend, generateName) {
     const tmpl = createStyle($, generateName(name), addImport);
     templates.push(tmpl);
     cache.set($, tmpl);
-    tmpl.vars.forEach((fn, name) => {
-      vars.set(name, fn);
+    tmpl.vars.forEach((fn, varName) => {
+      vars.set(varName, fn);
     });
     return tmpl;
   }
@@ -44,8 +44,10 @@ export default function createSheet(theme, backend, generateName) {
       for (let j = 0; j < scopes.length; j++) {
         const scope = scopes[j];
         const ruleSet = scope.rules.get(tmpl);
-        rules.push(...(ruleSet[-1] || []));
-        scopeRules.push(ruleSet);
+        if (ruleSet) {
+          rules.push(...(ruleSet[-1] || []));
+          scopeRules.push(ruleSet);
+        }
       }
 
       const statics = tmpl.statics;
@@ -63,7 +65,7 @@ export default function createSheet(theme, backend, generateName) {
 
   function createScope(parents, locals = new Map()) {
     const keys = new Set(locals.keys());
-    const selectAll = locals.size === 0;
+    const selectAll = locals.size === 0 || !scopes.length;
     const instances = new Map();
     const exports = {};
 
@@ -112,7 +114,7 @@ export default function createSheet(theme, backend, generateName) {
       exports,
 
       createScope(child) {
-        // TODO
+        // TODO merge parents with locals
         const scope = createScope(locals, child);
         children.push(scope);
         return scope;
@@ -124,6 +126,7 @@ export default function createSheet(theme, backend, generateName) {
       },
 
       remove() {
+        children.forEach(c => c.remove());
         scopes = scopes.filter(s => s !== scope);
         render();
       },

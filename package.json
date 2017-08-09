@@ -10,7 +10,7 @@
     "build": "rollup -c rollup.runtime.js && rollup -c rollup.compiler.js",
     "test": "npm run-script build && mocha",
     "test:watch": "mocha --watch-extensions css -w",
-    "prepublish": "npm run-script build"
+    "prepare": "npm run-script build"
   },
   "dependencies": {
     "@statechart/util-set": "^0.1.13",

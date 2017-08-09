@@ -120,4 +120,4 @@ export default function createStyle($, generateName, addImport) {
     imports,
     dependencies: new Set(varDeps),
   };
-};
+}
