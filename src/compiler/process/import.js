@@ -17,8 +17,12 @@ export default (root, compilation) => {
       // TODO support media queries
       // https://developer.mozilla.org/en-US/docs/Web/CSS/@import
 
-      compilation.import(path, sheetName, rule);
-      compilation.moduleImports.set(path, rule);
+      if (path) {
+        compilation.import(path, sheetName, rule);
+        compilation.moduleImports.set(path, rule);
+      } else {
+        compilation.cssImports.push(rule);
+      }
       rule.remove();
     }
   });

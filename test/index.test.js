@@ -83,7 +83,7 @@ function loadExpected(dir, exports) {
   const path = Path.join(dir, 'expected.css');
   return fs.readFile(path, 'utf8')
     .then(beautify)
-    .then(css => ({css: css, exports: exports}));
+    .then(css => ({ css, exports }));
 }
 
 function loadActual(dir, vars) {
@@ -122,7 +122,10 @@ function renderModule(path, locals) {
       return (name) => `EXPORTED_${mod}_${name}`;
     }
 
-    const { exports } = createSheet(theme, backend, generateName)(locals);
+    const sheet = createSheet(backend, generateName);
+
+    const { exports, render } = sheet.createScope(locals, theme);
+    render();
   });
 }
 

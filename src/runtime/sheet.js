@@ -9,129 +9,224 @@ function mapToObj(map) {
   return obj;
 }
 
-export default function createSheet(theme, backend, generateName) {
-  const cache = new Map();
-  const vars = new Map();
-  const templates = [];
+function mergeVars(acc, vars) {
+  // TODO merge based on priority
+  vars.forEach((value, key) => {
+    if (!acc.has(key)) acc.set(key, value);
+  });
+  return acc;
+}
 
-  function addImport($, name) {
-    if (cache.has($)) return cache.get($);
-    const tmpl = createStyle($, generateName(name), addImport);
-    templates.push(tmpl);
-    cache.set($, tmpl);
-    tmpl.vars.forEach((fn, varName) => {
+export default function createSheet(backend, generateName) {
+  const templates = [];
+  const modules = new Map();
+  const cssImports = [];
+
+  function add(vars, $, name) {
+    let template = modules.get($);
+    if (!template) {
+      template = createStyle($, generateName(name), add.bind(null, vars));
+      if (name) template.name = name;
+      modules.set($, template);
+      templates.push(template);
+    }
+    template.vars.forEach((fn, varName) => {
       vars.set(varName, fn);
     });
-    return tmpl;
-  }
-
-  Object
-    .keys(theme)
-    .forEach(k => {
-      const tmpl = addImport(theme[k].$, k);
-      tmpl.name = k;
+    template.cssImports.forEach((i) => {
+      cssImports.push(`@import ${JSON.stringify(i)};\n`);
     });
-
-  let scopes = [];
-
-  function render() {
-    const rules = [];
-
-    for (let i = 0; i < templates.length; i++) {
-      const tmpl = templates[i];
-
-      const scopeRules = [];
-      for (let j = 0; j < scopes.length; j++) {
-        const scope = scopes[j];
-        const ruleSet = scope.rules.get(tmpl);
-        if (ruleSet) {
-          rules.push(...(ruleSet[-1] || []));
-          scopeRules.push(ruleSet);
-        }
-      }
-
-      const statics = tmpl.statics;
-      for (let j = 0; j < statics.length; j++) {
-        const style = statics[j];
-        rules.push(...style);
-        for (var k = 0; k < scopeRules.length; k++) {
-          rules.push(...(scopeRules[k][j] || []));
-        }
-      }
-    }
-
-    backend(rules);
+    return template;
   }
 
-  function createScope(parents, locals = new Map()) {
-    const keys = new Set(locals.keys());
-    const selectAll = locals.size === 0 || !scopes.length;
-    const instances = new Map();
-    const exports = {};
-
-    const renderFns = templates
-      .filter(tmpl => selectAll || hasIntersection(tmpl.dependencies, keys))
-      .map(tmpl => {
-        const deps = tmpl.imports.map(i => instances.get(i));
-        const i = tmpl.init(deps);
-
-        instances.set(tmpl, i);
-
-        const name = tmpl.name;
-        if (name) {
-          exports[name] = mapToObj(i.exports);
-        }
-
-        return {
-          tmpl,
-          render: i.render
-        };
+  function addModules(modules) {
+    const vars = new Map();
+    const tmpls = new Set();
+    Object
+      .keys(modules)
+      .forEach(k => {
+        const template = add(vars, modules[k].$, k);
+        tmpls.add(template);
       });
+    return [tmpls, vars];
+  }
 
-    const scope = { };
-    scopes.push(scope);
+  function instantiate(overrides, tmpls, parentScope) {
+    const keys = new Set(overrides.keys());
+    const selectAll = overrides.size === 0 //&& tmpls.size === 0;
+    const instances = new Map();
+    const exports = Object.assign({}, parentScope.exports);
 
-    function renderScope() {
-      // TODO compute variables
-      const values = new Map([...parents, ...locals]);
-      const cache = new Map();
-      const rules = scope.rules = new Map();
+    const selected = selectAll ?
+      templates :
+      templates.filter(t => tmpls.has(t) || hasIntersection(t.dependencies, keys));
 
-      for (let i = 0; i < renderFns.length; i++) {
-        const { tmpl, render } = renderFns[i];
-        const ruleSet = render(values, cache);
-        rules.set(tmpl, ruleSet);
-      }
+    function init(template) {
+      const { imports, name } = template;
 
-      setImmediate(render);
+      const deps = imports.map(i => instances.get(i) || parentScope._get(i));
+      const i = template.init(deps);
+
+      instances.set(template, i);
+
+      if (name) exports[name] = mapToObj(i.exports);
+
+      return [
+        template,
+        i.render,
+      ];
     }
 
-    renderScope();
+    const renderFns = selected.map(init);
 
-    const children = [];
+    function render(acc, values, cache) {
+      for (let i = 0; i < renderFns.length; i++) {
+        const [ template, render ] = renderFns[i];
+        const result = render(values, cache);
+        let results = acc.get(template);
+        if (!results) {
+          results = [];
+          acc.set(template, results);
+        }
+        results.push(result);
+      }
+    }
 
-    return {
+    return [
       exports,
+      render,
+      instances,
+    ];
+  }
 
-      createScope(child) {
-        // TODO merge parents with locals
-        const scope = createScope(locals, child);
-        children.push(scope);
-        return scope;
+  function createScope(parentScope, overrides, modules) {
+    let childScopes = [];
+    const childRules = new Map();
+    let shouldPropagate = true;
+
+    const [ tmpls, tmplVars ] = addModules(modules);
+    const [ exports, render, instances ] = instantiate(overrides, tmpls, parentScope);
+
+    // tell children to render
+    function _render() {
+      shouldPropagate = false;
+      for (let i = 0, l = childScopes.length; i < l; i++) {
+        childScopes[i].render();
+      }
+      shouldPropagate = true;
+      propagate();
+    }
+
+    // a child is telling us to update
+    function _set(childScope, childRender, childVars) {
+      childRules.set(childScope, [childRender, childVars]);
+      if (shouldPropagate) return propagate();
+    }
+
+    function _get(template) {
+      return instances.get(template) || parentScope._get(template);
+    }
+
+    function propagate() {
+      const renderers = [ render ];
+      const vars = new Map();
+
+      for (let i = childScopes.length - 1; i > -1; i--) {
+        const [childRender, childVars] = childRules.get(childScopes[i]);
+        renderers.push(...childRender);
+        mergeVars(vars, childVars);
+      }
+      mergeVars(vars, overrides);
+      mergeVars(vars, tmplVars);
+
+      parentScope._set(scope, renderers, vars);
+    }
+
+    const scope = {
+      exports,
+      render: _render,
+      _set,
+      _get,
+
+      createScope(childOverrides, modules) {
+        const child = createScope(
+          scope,
+          childOverrides || new Map(),
+          modules || {},
+        );
+        childScopes.push(child);
+        return child;
       },
 
-      update($locals) {
-        locals = $locals || locals;
-        renderScope();
+      update($overrides) {
+        overrides = $overrides || overrides;
+        _render();
+      },
+
+      removeScope(childScope) {
+        childRules.delete(childScope);
+        childScopes = childScopes.filter(s => s !== childScope);
       },
 
       remove() {
-        children.forEach(c => c.remove());
-        scopes = scopes.filter(s => s !== scope);
-        render();
+        parentScope.removeScope(scope);
+        // TODO remove all of the children
+        // TODO remove any of the unused modules
       },
     };
+
+    return scope;
   }
 
-  return createScope.bind(null, vars);
+  function renderRoot(scopes) {
+    const rules = cssImports.slice();
+    const tmpls = templates.slice().sort(({ priority: a }, { priority: b }) => a - b);
+
+    for (let i = 0; i < tmpls.length; i++) {
+      const template = tmpls[i];
+      const templateRules = scopes.get(template);
+
+      for (let j = 0; j < templateRules.length; j++) {
+        const scopeRules = templateRules[j];
+        rules.push(...(scopeRules[-1] || []));
+      }
+
+      const statics = template.statics;
+      for (let j = 0; j < statics.length; j++) {
+        const style = statics[j];
+        rules.push(...style);
+        for (var k = 0; k < templateRules.length; k++) {
+          rules.push(...(templateRules[k][j] || []));
+        }
+      }
+    }
+
+    return rules;
+  }
+
+  const rootScope = createScope({
+    exports: {},
+
+    _get(template) {
+      throw new Error('uninstantiated template');
+    },
+
+    _set(_, renderers, vars) {
+      const acc = new Map();
+      const cache = new Map();
+      for (let i = 0; i < renderers.length; i++) {
+        renderers[i](acc, vars, cache);
+      }
+
+      const rules = renderRoot(acc);
+
+      backend(rules);
+    },
+
+    removeScope() {
+      // TODO remove the root scope
+    },
+  }, new Map(), {});
+
+  return rootScope;
 }

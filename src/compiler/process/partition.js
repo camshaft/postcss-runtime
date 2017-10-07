@@ -1,5 +1,5 @@
 function nested(node) {
-  if (node.hasVar) return [node];
+  if (node.hasVar || !node.nodes) return [node];
 
   const nodes = [];
   let current;

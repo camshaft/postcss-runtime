@@ -64,6 +64,7 @@ export default class Stringifier {
 
   stringify(root) {
     this.imports = [];
+    this.cssImports = [];
     this.exports = new Map();
     this.constants = new Map();
     this.staticNames = new Map();

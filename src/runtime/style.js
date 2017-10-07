@@ -73,6 +73,7 @@ export default function createStyle($, generateName, addImport) {
   const vars = new Map();
   const varDeps = [];
   const statics = [];
+  const cssImports = [];
   let imports = [];
   let init = () => ({
     exports: new Map(),
@@ -111,13 +112,19 @@ export default function createStyle($, generateName, addImport) {
     vars.set(target, (values, cache) => fetchValues(source, values, cache)[0]);
   }
 
-  $(createStatic, generateName, instance, define, alias);
+  function cssImport(string) {
+    cssImports.push(string);
+  }
+
+  $(createStatic, generateName, instance, define, alias, cssImport);
 
   return {
     statics,
     init,
     vars,
     imports,
+    cssImports,
     dependencies: new Set(varDeps),
+    priority: $.priority || 0,
   };
 }

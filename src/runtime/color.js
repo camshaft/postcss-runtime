@@ -15,7 +15,7 @@ export function percentage(value) {
 }
 
 function isPercentage(value) {
-  return value && value.type == percentage;
+  return value && value.type === percentage;
 }
 
 export function deg(value) {
@@ -26,7 +26,7 @@ export function deg(value) {
 }
 
 function isDeg(value) {
-  return value && value.type == deg;
+  return value && value.type === deg;
 }
 
 export function grad(value) {
