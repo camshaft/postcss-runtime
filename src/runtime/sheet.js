@@ -53,13 +53,8 @@ export default function createSheet(backend, generateName) {
 
   function instantiate(overrides, tmpls, parentScope) {
     const keys = new Set(overrides.keys());
-    const selectAll = overrides.size === 0 //&& tmpls.size === 0;
     const instances = new Map();
     const exports = Object.assign({}, parentScope.exports);
-
-    const selected = selectAll ?
-      templates :
-      templates.filter(t => tmpls.has(t) || hasIntersection(t.dependencies, keys));
 
     function init(template) {
       const { imports, name } = template;
@@ -77,7 +72,8 @@ export default function createSheet(backend, generateName) {
       ];
     }
 
-    const renderFns = selected.map(init);
+    // TODO make this more efficient by selecting applicable templates only
+    const renderFns = templates.map(init);
 
     function render(acc, values, cache) {
       for (let i = 0; i < renderFns.length; i++) {
