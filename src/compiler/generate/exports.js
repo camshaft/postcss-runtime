@@ -1,8 +1,10 @@
 import { formatExport } from '../utils';
 
 export default (compilation, builder, root) => {
-  const exports = compilation.exports;
-  const extend = compilation.extends;
+  const {
+    exports,
+    extends: ext
+  } = compilation
 
   // TODO figure out how to export everything except the $ function
   // extend.forEach((reason, path) => {
@@ -15,6 +17,6 @@ export default (compilation, builder, root) => {
     builder(`export const ${name} = ${JSON.stringify(key)};\n`);
   });
 
-  if (exports.size || extend.size) builder('\n');
+  if (exports.size || ext.size) builder('\n');
   else builder('// no exports\n\n');
 };

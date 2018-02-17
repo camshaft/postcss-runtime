@@ -1,6 +1,11 @@
 import { formatPath, sheetName } from '../utils';
 
 export default (root, compilation) => {
+  const {
+    moduleImports,
+    'extends': ext,
+    messages
+  } = compilation;
   root.walkAtRules((rule) => {
     if (rule.name == 'extends') {
       const params = rule.params;
@@ -14,9 +19,16 @@ export default (root, compilation) => {
         throw rule.error(`invalid syntax for extends: ${params}`, { word: String(params) });
       }
 
+      if (!ext.has(path)) {
+        messages.push({
+          type: 'postcss-runtime-extend',
+          path
+        });
+      }
+
       compilation.import(path, sheetName, rule);
-      compilation.moduleImports.set(path, rule);
-      compilation.extends.set(path, rule);
+      moduleImports.set(path, rule);
+      ext.set(path, rule);
       rule.remove();
     }
   });

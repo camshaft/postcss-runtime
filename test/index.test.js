@@ -130,7 +130,9 @@ function renderModule(path, locals) {
 }
 
 function compile(css) {
-  return postcss()
+  return postcss([
+      compiler.plugin(),
+    ])
     .process(css, { stringifier: compiler })
     .then((result) => String(result.css));
 }

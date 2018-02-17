@@ -5,6 +5,7 @@ import generateImports from './generate/imports';
 import generateConstants from './generate/constants';
 import generateExports from './generate/exports';
 import generateModule from './generate/module';
+import { MESSAGES } from '../plugin';
 
 export default class Stringifier {
   constructor(builder, opts = {}) {
@@ -76,6 +77,7 @@ export default class Stringifier {
     this.defines = new Map();
     this.aliases = new Map();
     this.customRules = new Map();
+    this.messages = root[MESSAGES] || [];
 
     [
       processCustomRules,

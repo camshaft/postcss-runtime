@@ -1,7 +1,10 @@
 export default (root, compilation) => {
-  const dynamicNames = compilation.dynamicNames;
-  const staticNames = compilation.staticNames;
-  const exports = compilation.exports;
+  const {
+    dynamicNames,
+    staticNames,
+    exports: exp,
+    messages,
+  } = compilation;
 
   // TODO setup selector scoping
 
@@ -12,7 +15,13 @@ export default (root, compilation) => {
         const name = node.value;
 
         names.set(name, null);
-        exports.set(name);
+        if (!exp.has(name)) {
+          messages.push({
+            type: 'postcss-runtime-export',
+            name
+          });
+        }
+        exp.set(name);
         node.unquote = true;
 
         function value() {
