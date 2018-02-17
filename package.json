@@ -1,6 +1,6 @@
 {
   "name": "postcss-runtime",
-  "version": "0.2.0",
+  "version": "0.2.3",
   "description": "compile PostCSS to JS",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
